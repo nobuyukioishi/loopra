@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Loopra - AB Loop & Speed Control for Music",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "AB Loop & Speed Control for Music – Loop any section and control playback speed on  YouTube Music.",
 
   "permissions": [
