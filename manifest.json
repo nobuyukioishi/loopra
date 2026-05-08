@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Loopra - AB Loop & Speed Control for Music",
+  "version": "1.0.0",
+  "description": "AB Loop & Speed Control for Music – Loop any section and control playback speed on  YouTube Music.",
+
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "tabs",
+    "activeTab"
+  ],
+
+  "host_permissions": [
+    "https://music.youtube.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://music.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+
+  "action": {
+    "default_title": "Loopra を開く"
+  }
+}
