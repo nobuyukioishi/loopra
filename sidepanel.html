@@ -58,7 +58,7 @@
       border: 1px solid var(--accent2);
       border-radius: var(--radius);
       padding: 7px 10px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-size: 11px;
       color: var(--accent2);
       display: none;
@@ -76,9 +76,25 @@
 
     /* ---- Sections ---- */
     .section { background: var(--surface); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; }
-    .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+    .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .section-hint { font-size: 10px; color: var(--accent2); margin-bottom: 8px; display: none; }
+    .section-hint.visible { display: block; }
     .time-display { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    input[type="range"] { width: 100%; cursor: pointer; }
+    #speed-slider {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 16px; background: transparent; outline: none; cursor: pointer;
+    }
+    #speed-slider::-webkit-slider-runnable-track {
+      height: 4px; background: var(--surface2); border-radius: 2px;
+    }
+    #speed-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--text-muted); margin-top: -6px; cursor: pointer;
+      transition: background var(--transition);
+    }
+    #speed-slider::-webkit-slider-thumb:hover { background: var(--text); }
 
     /* ---- Controls ---- */
     .controls { display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 10px; }
@@ -104,14 +120,24 @@
     .loop-point { background: var(--bg); border-radius: 6px; padding: 8px; }
     .loop-point-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
     .loop-point-time {
-      font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;
-      color: var(--accent2); margin-bottom: 6px;
+      display: inline-flex; align-items: baseline;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px; margin-left: -4px;
+    }
+    .time-sec {
+      font-size: 16px; font-weight: 700; color: var(--accent2);
       cursor: ns-resize; user-select: none;
-      border-radius: 4px; padding: 2px 4px; margin-left: -4px;
+      border-radius: 4px; padding: 2px 0 2px 3px;
       transition: background var(--transition);
     }
-    .loop-point-time:hover { background: rgba(255,255,255,0.07); }
-    .loop-point-time:focus { outline: 1px solid var(--accent2); outline-offset: 1px; }
+    .time-dec {
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      cursor: ns-resize; user-select: none;
+      border-radius: 4px; padding: 2px 3px 2px 1px;
+      transition: background var(--transition);
+    }
+    .time-sec:hover, .time-dec:hover { background: rgba(255,255,255,0.07); }
+    .time-sec:focus, .time-dec:focus { outline: 1px solid var(--accent2); outline-offset: 1px; }
     .loop-active { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
 
     /* toggle */
@@ -156,14 +182,15 @@
     .edit-ab-box { flex: 1; background: var(--bg); border-radius: 6px; padding: 6px 8px; text-align: center; }
     .edit-ab-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
     .edit-ab-arrow { font-size: 14px; color: var(--text-muted); flex-shrink: 0; }
+    .edit-ab-times { display: inline-flex; align-items: baseline; justify-content: center; }
     .edit-ab-time {
-      display: block;
       font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
       color: var(--accent2);
       cursor: ns-resize; user-select: none;
       border-radius: 4px; padding: 2px 4px;
       transition: background var(--transition);
     }
+    .edit-ab-time.time-dec { font-size: 11px; color: var(--text-muted); }
     .edit-ab-time:hover { background: rgba(255,255,255,0.07); }
     .edit-ab-time:focus { outline: 1px solid var(--accent2); outline-offset: 1px; }
 
@@ -174,9 +201,140 @@
     .song-item-title { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .song-item-meta { font-size: 10px; color: var(--text-muted); }
 
-    /* ---- Settings ---- */
-    .setting-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 0; }
-    .setting-label { font-size: 12px; color: var(--text); flex: 1; }
+    /* ---- Section header with action button ---- */
+    .section-header { display: flex; align-items: center; margin-bottom: 8px; }
+    .section-header .section-label { margin-bottom: 0; flex: 1; }
+
+    /* ---- Editor Overlay ---- */
+    #editor-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: var(--bg); overflow-y: auto; padding: 16px; }
+    #editor-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    #editor-header span { font-size: 14px; font-weight: 700; }
+    .editor-card { background: var(--surface); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; position: relative; }
+    .editor-card-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+    .editor-card-fields { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .editor-title-input, .editor-url-input {
+      width: 100%; background: var(--bg); border: 1px solid #333; border-radius: 6px;
+      color: var(--text); padding: 5px 8px; font-size: 12px; outline: none;
+    }
+    .editor-title-input { font-weight: 600; }
+    .editor-url-input { color: var(--text-muted); }
+    .editor-title-input:focus, .editor-url-input:focus { border-color: var(--accent); }
+    .editor-del-song {
+      background: none; border: none; color: var(--text-muted); font-size: 17px; cursor: pointer;
+      padding: 2px 4px; border-radius: 4px; line-height: 1; flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+    .editor-del-song:hover { color: var(--accent); background: rgba(233,69,96,0.12); }
+    .editor-loops-list { margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .editor-loop-row { display: flex; align-items: center; gap: 6px; }
+    .editor-loop-name {
+      flex: 1; min-width: 0; background: var(--bg); border: 1px solid #333; border-radius: 4px;
+      color: var(--text); padding: 4px 7px; font-size: 12px; outline: none;
+    }
+    .editor-loop-a, .editor-loop-b {
+      width: 62px; background: var(--bg); border: 1px solid #333; border-radius: 4px;
+      color: var(--accent2); padding: 4px 5px; font-size: 12px; font-variant-numeric: tabular-nums;
+      outline: none; text-align: center;
+    }
+    .editor-loop-name:focus, .editor-loop-a:focus, .editor-loop-b:focus { border-color: var(--accent); }
+    .editor-loop-arrow { font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+    .editor-card-footer { display: flex; justify-content: flex-end; }
+
+    /* ---- A-B Loop Bar ---- */
+    .loop-bar-wrap { margin-bottom: 12px; user-select: none; -webkit-user-select: none; }
+    .loop-bar-track {
+      position: relative;
+      height: 14px;
+      background: var(--bg);
+      border-radius: 7px;
+      cursor: pointer;
+    }
+    .loop-bar-range {
+      position: absolute;
+      top: 0; bottom: 0;
+      background: rgba(245, 166, 35, 0.3);
+      border-radius: 4px;
+      pointer-events: none;
+      display: none;
+    }
+    .loop-bar-playhead {
+      position: absolute;
+      top: -4px; bottom: -4px;
+      width: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transform: translateX(-50%);
+      cursor: col-resize;
+      left: 0;
+    }
+    .loop-bar-handle {
+      position: absolute;
+      top: -6px; bottom: -6px;
+      width: 18px;
+      transform: translateX(-50%);
+      cursor: col-resize;
+      display: none;
+      z-index: 2;
+    }
+    .loop-bar-handle::before {
+      content: "";
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 3px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      background: var(--handle-color, var(--accent2));
+    }
+    .loop-bar-handle:hover::before { opacity: 0.8; }
+    .loop-bar-labels {
+      position: relative;
+      height: 14px;
+      margin-top: 8px;
+      pointer-events: none;
+    }
+    .loop-bar-label {
+      position: absolute;
+      font-size: 9px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      transform: translateX(-50%);
+      display: none;
+      white-space: nowrap;
+    }
+    #loop-bar-label-a { color: color-mix(in srgb, var(--accent) 80%, var(--text-muted)); }
+    #loop-bar-label-b { color: color-mix(in srgb, var(--accent2) 80%, var(--text-muted)); }
+
+    /* ---- Saved item color bar ---- */
+    .saved-item-color-bar { width: 3px; border-radius: 2px; align-self: stretch; flex-shrink: 0; }
+    .saved-item.active { background: rgba(255,255,255,0.06); outline: 1px solid rgba(255,255,255,0.12); }
+
+    /* ---- Color picker (editor) ---- */
+    .editor-loop-wrap { margin-bottom: 6px; }
+    .color-picker { display: flex; gap: 4px; padding: 4px 0 0; }
+    .color-dot {
+      width: 13px; height: 13px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; box-sizing: border-box;
+      transition: border-color 0.1s, transform 0.1s;
+    }
+    .color-dot:hover { transform: scale(1.2); }
+    .color-dot.selected { border-color: rgba(255,255,255,0.85); }
+
+    /* ---- Editor save button state ---- */
+    .editor-save-btn { color: var(--text-muted); }
+    .editor-save-btn.dirty { background: var(--accent); color: white; font-weight: 600; }
+
+    /* ---- Color hex input ---- */
+    .color-hex-input {
+      flex-shrink: 0; width: 68px; background: var(--bg); border: 1px solid #333; border-radius: 4px;
+      color: var(--text); padding: 2px 5px; font-size: 11px; font-family: monospace; outline: none;
+    }
+    .color-hex-input:focus { border-color: var(--accent); }
+
+    /* ---- Editor loop right column (A→B + color picker stacked) ---- */
+    .editor-loop-right { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+    .editor-loop-ab { display: flex; align-items: center; gap: 6px; }
+    .editor-loop-right .color-picker { padding-top: 0; justify-content: flex-end; }
+
   </style>
 </head>
 <body>
@@ -190,30 +348,10 @@
   </select>
 </div>
 
-<div id="warning-bar">
-  <span id="warning-text"></span>
-  <button id="warning-close">×</button>
-</div>
-
 <div class="song-title-wrapper" id="song-title-wrapper">
   <div id="song-title-track">
     <span class="song-title" id="song-title">YouTube Musicを開いてください</span>
     <span class="song-title" id="song-title-clone" aria-hidden="true" style="display:none"></span>
-  </div>
-</div>
-
-<!-- 再生位置 -->
-<div class="section">
-  <div class="section-label" data-i18n="labelPosition">再生位置</div>
-  <div class="time-display">
-    <span id="current-time">0:00</span>
-    <span id="duration">0:00</span>
-  </div>
-  <input type="range" id="seek-bar" min="0" max="100" value="0" step="0.1">
-  <div class="controls">
-    <button class="btn-secondary" id="btn-back5" data-i18n="btnBack">« 5秒</button>
-    <button class="btn-primary" id="btn-play" data-i18n="btnPlay">▶ 再生</button>
-    <button class="btn-secondary" id="btn-fwd5" data-i18n="btnFwd">5秒 »</button>
   </div>
 </div>
 
@@ -233,18 +371,52 @@
   </div>
 </div>
 
+<!-- 再生位置 -->
+<div class="section">
+  <div class="section-label" data-i18n="labelPosition">Timeline</div>
+  <div class="time-display">
+    <span id="current-time">0:00</span>
+    <span id="duration">0:00</span>
+  </div>
+  <div class="loop-bar-wrap">
+    <div class="loop-bar-track" id="loop-bar-track">
+      <div class="loop-bar-range" id="loop-bar-range"></div>
+      <div class="loop-bar-playhead" id="loop-bar-playhead"></div>
+      <div class="loop-bar-handle" id="loop-bar-handle-a"></div>
+      <div class="loop-bar-handle" id="loop-bar-handle-b"></div>
+    </div>
+    <div class="loop-bar-labels">
+      <span class="loop-bar-label" id="loop-bar-label-a"></span>
+      <span class="loop-bar-label" id="loop-bar-label-b"></span>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn-secondary" id="btn-back5" data-i18n="btnBack">« 5秒</button>
+    <button class="btn-primary" id="btn-play" data-i18n="btnPlay">▶ 再生</button>
+    <button class="btn-secondary" id="btn-fwd5" data-i18n="btnFwd">5秒 »</button>
+  </div>
+</div>
+
 <!-- A-Bループ -->
 <div class="section">
   <div class="section-label" data-i18n="labelLoop">A-Bループ</div>
+  <div id="warning-bar">
+    <span id="warning-text"></span>
+    <button id="warning-close">×</button>
+  </div>
   <div class="loop-points">
     <div class="loop-point">
       <div class="loop-point-label" data-i18n="loopALabel">▶ A点（開始）</div>
-      <div class="loop-point-time" id="loop-a-display" tabindex="0">--:--</div>
+      <div class="loop-point-time" id="loop-a-display">
+        <span class="time-sec" id="loop-a-sec" tabindex="0">--:--</span><span class="time-dec" id="loop-a-dec" tabindex="0">.-</span>
+      </div>
       <button class="btn-small" id="btn-set-a" data-i18n="btnSetA">現在位置をセット</button>
     </div>
     <div class="loop-point">
       <div class="loop-point-label" data-i18n="loopBLabel">■ B点（終了）</div>
-      <div class="loop-point-time" id="loop-b-display" tabindex="0">--:--</div>
+      <div class="loop-point-time" id="loop-b-display">
+        <span class="time-sec" id="loop-b-sec" tabindex="0">--:--</span><span class="time-dec" id="loop-b-dec" tabindex="0">.-</span>
+      </div>
       <button class="btn-small" id="btn-set-b" data-i18n="btnSetB">現在位置をセット</button>
     </div>
   </div>
@@ -262,6 +434,10 @@
 <!-- 保存済みループ -->
 <div class="section">
   <div class="section-label" data-i18n="labelSaved">保存済みループ</div>
+  <div class="section-hint" id="saved-loops-hint">
+    <button class="btn-small" id="btn-fetch-title" data-i18n="btnFetchTitle">曲名を取得</button>
+    <div id="saved-loops-reload-hint" style="display:none; margin-top:5px; font-size:10px; color:var(--text-muted);" data-i18n="hintReload"></div>
+  </div>
   <div class="save-form">
     <input type="text" id="loop-name-input" data-i18n-placeholder="loopNamePlaceholder" placeholder="ループ名（例: サビ前半）" maxlength="30">
     <button class="btn-small" id="btn-save-loop" data-i18n="btnSave">保存</button>
@@ -273,23 +449,23 @@
 
 <!-- 保存済みの曲 -->
 <div class="section">
-  <div class="section-label" data-i18n="labelAllSongs">保存済みの曲</div>
+  <div class="section-header">
+    <div class="section-label" data-i18n="labelAllSongs">保存済みの曲</div>
+    <button id="btn-editor-open" class="btn-small" data-i18n="btnOpenEditor">編集エディタを開く</button>
+  </div>
   <div class="songs-list" id="songs-list">
     <div class="empty-hint" data-i18n="emptyAllSongs">保存済みの曲はありません</div>
   </div>
 </div>
 
-<!-- 設定 -->
-<div class="section">
-  <div class="section-label" data-i18n="labelSettings">設定</div>
-  <div class="setting-row">
-    <span class="setting-label" data-i18n="settingAutoOpen">YouTube Musicを開いたとき自動起動</span>
-    <label class="toggle">
-      <input type="checkbox" id="toggle-auto-open">
-      <div class="toggle-track"></div>
-      <div class="toggle-thumb"></div>
-    </label>
+
+<!-- Data Editor Overlay -->
+<div id="editor-overlay">
+  <div id="editor-header">
+    <button class="btn-secondary" id="btn-editor-close" data-i18n="btnEditorClose">← 戻る</button>
+    <span data-i18n="labelEditor">データエディタ</span>
   </div>
+  <div id="editor-songs-list"></div>
 </div>
 
 <script src="sidepanel.js"></script>

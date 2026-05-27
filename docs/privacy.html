@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Loopra</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --surface: #16213e;
+      --accent: #e94560;
+      --text: #eaeaea;
+      --text-muted: #888;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    header {
+      background: #1a1a2e;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    header img { width: 28px; height: 28px; border-radius: 6px; }
+    header span { font-size: 16px; font-weight: 700; }
+    .back {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .back:hover { color: var(--text); }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .last-updated {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    section { margin-bottom: 36px; }
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    p { font-size: 14px; color: #ccc; margin-bottom: 10px; }
+    p:last-child { margin-bottom: 0; }
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    li {
+      font-size: 14px;
+      color: #ccc;
+      padding-left: 16px;
+      position: relative;
+    }
+    li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+    }
+    .highlight-box {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .highlight-box strong { color: var(--text); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">
+    <img src="../icons/icon128.png" alt="Loopra icon">
+    <span>Loopra</span>
+  </a>
+  <a class="back" href="index.html">← Back</a>
+</header>
+
+<main>
+  <h1 class="page-title">Privacy Policy</h1>
+  <p class="last-updated">Last updated: May 2025</p>
+
+  <div class="highlight-box">
+    <strong>The short version:</strong> Loopra stores your loop data locally on your device using your browser's built-in storage. No data is ever sent to any server. No accounts required. No tracking.
+  </div>
+
+  <section>
+    <h2>What data Loopra stores</h2>
+    <p>Loopra stores the following data locally in your browser using <code>chrome.storage.local</code>:</p>
+    <ul>
+      <li>Loop names, start times (A), and end times (B) that you create</li>
+      <li>The YouTube Music page URL and song title associated with each loop</li>
+      <li>Your preferred display language (English or Japanese)</li>
+    </ul>
+    <p>This data exists solely to restore your loops the next time you visit the same song. It is never transmitted anywhere.</p>
+  </section>
+
+  <section>
+    <h2>What data Loopra does NOT collect</h2>
+    <ul>
+      <li>No personal information (name, email, account details)</li>
+      <li>No browsing history outside of music.youtube.com</li>
+      <li>No analytics, crash reports, or usage statistics</li>
+      <li>No cookies</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Permissions explained</h2>
+    <p>Loopra requests the following Chrome permissions and uses them only as described:</p>
+    <ul>
+      <li><strong>storage</strong> — to save your loops locally in your browser</li>
+      <li><strong>tabs</strong> — to detect when you navigate to or away from YouTube Music, so the extension can enable or disable itself accordingly</li>
+      <li><strong>activeTab</strong> — to communicate with the YouTube Music page to read playback position and control the player</li>
+      <li><strong>sidePanel</strong> — to display the Loopra interface in Chrome's side panel</li>
+    </ul>
+    <p>Access to page content is limited exclusively to <strong>music.youtube.com</strong> via the host permission declaration in the extension manifest.</p>
+  </section>
+
+  <section>
+    <h2>Third-party services</h2>
+    <p>Loopra does not integrate with any third-party services, analytics platforms, or external APIs. The extension operates entirely within your browser.</p>
+  </section>
+
+  <section>
+    <h2>Data deletion</h2>
+    <p>All data stored by Loopra can be deleted at any time by:</p>
+    <ul>
+      <li>Using the built-in data editor within the extension to remove individual songs or loops</li>
+      <li>Uninstalling the extension, which removes all associated local storage</li>
+      <li>Clearing your browser's extension storage via Chrome settings</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Children's privacy</h2>
+    <p>Loopra does not knowingly collect any information from children under the age of 13. The extension collects no personal information from any user regardless of age.</p>
+  </section>
+
+  <section>
+    <h2>Changes to this policy</h2>
+    <p>If this privacy policy is updated, the new version will be published at this URL with a revised "Last updated" date. Continued use of the extension after any changes constitutes acceptance of the updated policy.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>If you have any questions about this privacy policy, please open an issue on the <a href="https://github.com/nobuyukioishi/loopra" target="_blank" rel="noopener">GitHub repository</a>.</p>
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Nobuyuki Oishi &nbsp;·&nbsp; <a href="index.html">Loopra</a>
+</footer>
+
+</body>
+</html>

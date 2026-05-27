@@ -6,9 +6,24 @@ let loopInterval = null;
 let loopStart = null;
 let loopEnd = null;
 let loopEnabled = false;
+let desiredPlaybackRate = 1.0;
+let rateChangeAttachedTo = null;
 
 function getVideo() {
   return document.querySelector("video");
+}
+
+function onRateChange() {
+  if (loopEnabled && this.playbackRate !== desiredPlaybackRate) {
+    this.playbackRate = desiredPlaybackRate;
+  }
+}
+
+function ensureRateListener(video) {
+  if (rateChangeAttachedTo === video) return;
+  if (rateChangeAttachedTo) rateChangeAttachedTo.removeEventListener("ratechange", onRateChange);
+  video.addEventListener("ratechange", onRateChange);
+  rateChangeAttachedTo = video;
 }
 
 // ループ監視
@@ -17,6 +32,10 @@ function startLoopWatch() {
   loopInterval = setInterval(() => {
     const video = getVideo();
     if (!video || !loopEnabled) return;
+    ensureRateListener(video);
+    if (video.playbackRate !== desiredPlaybackRate) {
+      video.playbackRate = desiredPlaybackRate;
+    }
     if (loopEnd !== null && video.currentTime >= loopEnd) {
       video.currentTime = loopStart ?? 0;
     }
@@ -38,19 +57,21 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         sendResponse({ error: "video not found" });
         return true;
       }
+      const mediaTitle = navigator.mediaSession?.metadata?.title;
       sendResponse({
         currentTime: video.currentTime,
         duration: video.duration || 0,
         playbackRate: video.playbackRate,
         paused: video.paused,
-        title: document.title,
+        title: mediaTitle ? mediaTitle : document.title,
         url: location.href
       });
       break;
     }
 
     case "SET_PLAYBACK_RATE": {
-      if (video) video.playbackRate = message.rate;
+      desiredPlaybackRate = message.rate;
+      if (video) video.playbackRate = desiredPlaybackRate;
       sendResponse({ ok: true });
       break;
     }

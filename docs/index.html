@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loopra — AB Loop & Speed Control for YouTube Music</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --surface: #16213e;
+      --accent: #e94560;
+      --accent2: #f5a623;
+      --text: #eaeaea;
+      --text-muted: #888;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ---- Header ---- */
+    header {
+      padding: 64px 24px 48px;
+      text-align: center;
+      background: linear-gradient(180deg, #1a1a2e 0%, var(--bg) 100%);
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .logo img { width: 48px; height: 48px; border-radius: 10px; }
+    .logo-text {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tagline {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .cta-btn:hover { background: #c73652; transform: translateY(-1px); }
+    .cta-btn svg { width: 20px; height: 20px; }
+
+    /* ---- Screenshot ---- */
+    .screenshot-wrap {
+      max-width: 360px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+    .screenshot-wrap img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .screenshot-placeholder {
+      width: 100%;
+      aspect-ratio: 360/600;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* ---- Features ---- */
+    .features {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .features-title {
+      text-align: center;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .feature-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .accent { color: var(--accent); }
+    .accent2 { color: var(--accent2); }
+
+    /* ---- How it works ---- */
+    .how {
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 64px 24px;
+    }
+    .how-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .how-inner h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-body h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .step-body p { font-size: 13px; color: var(--text-muted); }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="../icons/icon128.png" alt="Loopra icon">
+    <span class="logo-text">Loopra</span>
+  </div>
+  <p class="tagline">AB Loop &amp; Speed Control for YouTube Music. Practice, study, and enjoy music your way.</p>
+  <a class="cta-btn" href="https://chrome.google.com/webstore" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+    Add to Chrome — It's Free
+  </a>
+</header>
+
+<div class="screenshot-wrap">
+  <div class="screenshot-placeholder">Screenshot coming soon</div>
+</div>
+
+<section class="features">
+  <p class="features-title">What Loopra does</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🔁</span>
+      <h3>AB Loop</h3>
+      <p>Set a start point (A) and end point (B) to loop any section of a song endlessly. Perfect for ear training and learning by ear.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎚️</span>
+      <h3>Speed Control</h3>
+      <p>Slow down or speed up playback from 0.5× to 1.5× without affecting pitch. Ideal for transcription and practice.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💾</span>
+      <h3>Save Loops</h3>
+      <p>Name and save multiple loops per song. They're stored locally in your browser and ready whenever you return.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎨</span>
+      <h3>Visual Timeline</h3>
+      <p>All your saved loops are shown as colored ranges on a timeline. See and navigate your loops at a glance.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <h3>100% Local</h3>
+      <p>No accounts, no servers, no tracking. Your loops stay in your browser. Nothing ever leaves your device.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <h3>Instant Access</h3>
+      <p>Open from Chrome's side panel — works alongside YouTube Music without interrupting what's playing.</p>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="how-inner">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Open YouTube Music</h4>
+          <p>Navigate to any song on music.youtube.com. The Loopra icon in your toolbar will turn active.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Set your loop points</h4>
+          <p>Click "Set Current Time" at point A, then again at point B — or drag the handles on the timeline directly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Enable the loop</h4>
+          <p>Toggle the loop switch on. The section plays on repeat. Adjust A and B on the fly and hear changes instantly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Save for later</h4>
+          <p>Give the loop a name and save it. It'll be there next time you open the song.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="https://github.com/nobuyukioishi/loopra" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <p>&copy; 2025 Nobuyuki Oishi. Loopra is not affiliated with YouTube or Google.</p>
+</footer>
+
+</body>
+</html>
